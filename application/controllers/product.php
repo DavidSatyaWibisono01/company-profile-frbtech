@@ -7,33 +7,38 @@ class Product extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Product_m"); //load model product
+        $this->load->model("Product_m");
+
+        if($this->session->userdata('status_id') != '1'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Anda belum Login!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>');
+          redirect('auth/login');
+        }
     }
 
-    //method pertama yang akan di eksekusi
     public function index()
     {
 
         $data["title"] = "List Data product";
-        //ambil fungsi getAll untuk menampilkan semua data product
         $data["data_product"] = $this->Product_m->getAll();
-        //load view header.php pada folder views/templates
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        //load view index.php pada folder views/product
         $this->load->view('product/index', $data);
         $this->load->view('templates/footer');
     }
 
-    //method add digunakan untuk menampilkan form tambah data product
     public function add()
     {
-        $product = $this->Product_m; //objek model
-        $validation = $this->form_validation; //objek form validation
-        $validation->set_rules($product->rules()); //menerapkan rules validasi pada Product_m
-        //kondisi jika semua kolom telah divalidasi, maka akan menjalankan method save pada Product_m
+        $product = $this->Product_m; 
+        $validation = $this->form_validation; 
+        $validation->set_rules($product->rules()); 
         if ($validation->run()) {
             $product->save();
+            $product->upload();
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
             Data product berhasil disimpan. 
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -43,6 +48,7 @@ class Product extends CI_Controller
         }
         $data["title"] = "Tambah Data product";
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('product/add', $data);
         $this->load->view('templates/footer');
@@ -69,6 +75,7 @@ class Product extends CI_Controller
         $data["data_product"] = $product->getById($id);
         if (!$data["data_product"]) show_404();
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('product/edit', $data);
         $this->load->view('templates/footer');

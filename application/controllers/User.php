@@ -7,31 +7,35 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("User_m"); //load model user
+        $this->load->model("User_m");
+
+        if($this->session->userdata('status_id') != '1'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Anda belum Login!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>');
+          redirect('auth/login');
+        }
     }
 
-    //method pertama yang akan di eksekusi
     public function index()
     {
 
         $data["title"] = "List Data User";
-        //ambil fungsi getAll untuk menampilkan semua data user
         $data["data_user"] = $this->User_m->getAll();
-        //load view header.php pada folder views/templates
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        //load view index.php pada folder views/user
         $this->load->view('user/index', $data);
         $this->load->view('templates/footer');
     }
 
-    //method add digunakan untuk menampilkan form tambah data user
     public function add()
     {
-        $user = $this->User_m; //objek model
-        $validation = $this->form_validation; //objek form validation
-        $validation->set_rules($user->rules()); //menerapkan rules validasi pada User_m
-        //kondisi jika semua kolom telah divalidasi, maka akan menjalankan method save pada User_m
+        $user = $this->User_m;
+        $validation = $this->form_validation;
+        $validation->set_rules($user->rules());
         if ($validation->run()) {
             $user->save();
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -43,6 +47,7 @@ class User extends CI_Controller
         }
         $data["title"] = "Tambah Data user";
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('user/add', $data);
         $this->load->view('templates/footer');
@@ -69,6 +74,7 @@ class User extends CI_Controller
         $data["data_user"] = $user->getById($id);
         if (!$data["data_user"]) show_404();
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('user/edit', $data);
         $this->load->view('templates/footer');
@@ -87,4 +93,5 @@ class User extends CI_Controller
           </button></div>');
         $this->output->set_output(json_encode($msg));
     }
+
 }

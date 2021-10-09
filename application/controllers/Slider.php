@@ -7,31 +7,35 @@ class Slider extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Slider_m"); //load model slider
+        $this->load->model("Slider_m");
+
+        if($this->session->userdata('status_id') != '1'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Anda belum Login!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>');
+          redirect('auth/login');
+        }
     }
 
-    //method pertama yang akan di eksekusi
     public function index()
     {
 
         $data["title"] = "List Data Slider";
-        //ambil fungsi getAll untuk menampilkan semua data slider
         $data["data_slider"] = $this->Slider_m->getAll();
-        //load view header.php pada folder views/templates
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        //load view index.php pada folder views/slider
         $this->load->view('slider/index', $data);
         $this->load->view('templates/footer');
     }
 
-    //method add digunakan untuk menampilkan form tambah data slider
     public function add()
     {
-        $slider = $this->Slider_m; //objek model
-        $validation = $this->form_validation; //objek form validation
-        $validation->set_rules($slider->rules()); //menerapkan rules validasi pada Slider_m
-        //kondisi jika semua kolom telah divalidasi, maka akan menjalankan method save pada Slider_m
+        $slider = $this->Slider_m;
+        $validation = $this->form_validation;
+        $validation->set_rules($slider->rules());
         if ($validation->run()) {
             $slider->save();
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -43,6 +47,7 @@ class Slider extends CI_Controller
         }
         $data["title"] = "Tambah Data slider";
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('slider/add', $data);
         $this->load->view('templates/footer');
@@ -69,6 +74,7 @@ class Slider extends CI_Controller
         $data["data_slider"] = $slider->getById($id);
         if (!$data["data_slider"]) show_404();
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('slider/edit', $data);
         $this->load->view('templates/footer');

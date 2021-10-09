@@ -7,31 +7,35 @@ class Services extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Services_m"); //load model services
+        $this->load->model("Services_m");
+
+        if($this->session->userdata('status_id') != '1'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Anda belum Login!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>');
+          redirect('auth/login');
+        }
     }
 
-    //method pertama yang akan di eksekusi
     public function index()
     {
 
         $data["title"] = "List Data services";
-        //ambil fungsi getAll untuk menampilkan semua data services
         $data["data_services"] = $this->Services_m->getAll();
-        //load view header.php pada folder views/templates
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        //load view index.php pada folder views/services
         $this->load->view('services/index', $data);
         $this->load->view('templates/footer');
     }
 
-    //method add digunakan untuk menampilkan form tambah data services
     public function add()
     {
-        $services = $this->Services_m; //objek model
-        $validation = $this->form_validation; //objek form validation
-        $validation->set_rules($services->rules()); //menerapkan rules validasi pada Services_m
-        //kondisi jika semua kolom telah divalidasi, maka akan menjalankan method save pada Services_m
+        $services = $this->Services_m;
+        $validation = $this->form_validation;
+        $validation->set_rules($services->rules());
         if ($validation->run()) {
             $services->save();
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -43,6 +47,7 @@ class Services extends CI_Controller
         }
         $data["title"] = "Tambah Data services";
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('services/add', $data);
         $this->load->view('templates/footer');
@@ -69,6 +74,7 @@ class Services extends CI_Controller
         $data["data_services"] = $services->getById($id);
         if (!$data["data_services"]) show_404();
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
         $this->load->view('services/edit', $data);
         $this->load->view('templates/footer');

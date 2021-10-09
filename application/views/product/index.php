@@ -40,7 +40,7 @@
                                         <td><?= $no++ ?></td>
                                         <td><?= $row->nama ?></td>
                                         <td><?= $row->deskripsi ?></td>
-                                        <td><?= $row->foto ?></td>
+                                        <td><img src="<?= base_url('upload/product/'.$row->foto) ?>"></td>
                                         <td><?= $row->link ?></td>
                                         <td><?= $row->status_id ?></td> 
                                         <td>

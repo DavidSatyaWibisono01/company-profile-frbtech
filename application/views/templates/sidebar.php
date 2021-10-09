@@ -10,7 +10,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
+      <!-- Sidebar user panel (optional)
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="<?=base_url('assets');?>/vendor/AdminLTE-3.0.5/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
@@ -18,7 +18,7 @@
         <div class="info">
           <a href="#" class="d-block">FRB Technology</a>
         </div>
-      </div>
+      </div> -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -89,21 +89,18 @@
               </p>
             </a>
           </li>
-          
-          <li class="nav-item mt-5">
+          <li class="nav-item">
             <a href="<?= base_url(); ?>ganti_pass" class="nav-link">
-              <!-- <i class="nav-icon fas fa-circle text-info"></i> -->
               <i class="far fa-edit"></i>
               <p>Ganti password</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="<?= base_url(); ?>login" class="nav-link">
-              <!-- <i class="nav-icon fas fa-circle text-danger"></i> -->
+          <!-- <li class="nav-item">
+            <a href="<?= base_url(); ?>auth" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
               <p>Logout</p>
             </a>
-          </li>
+          </li> -->
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

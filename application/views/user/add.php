@@ -38,14 +38,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="status_id" class="col-sm-2 col-form-label">status_id</label>
+                        <label for="status_id" class="col-sm-2 col-form-label">Status Id</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="status_id" name="status_id">
                                 <option value="" selected disabled>Pilih</option>
                                 <option value="0" <?php if (set_value('status_id') == "0") : echo "selected";
                                                         endif; ?>>0</option>
                                 <option value="1" <?php if (set_value('status_id') == "1") : echo "selected";
-                                                            endif; ?>>1</option>
+                                                        endif; ?>>1</option>
                             </select>
                             <small class="text-danger">
                                 <?php echo form_error('status_id') ?>
